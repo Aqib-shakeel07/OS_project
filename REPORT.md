@@ -1,7 +1,7 @@
 Title: OS_Project_Race_Condition — Reader–Writer System Call
 Team Members: Aqib Shakeel (2022104), Muhammad Bilal (2023395)
-GitHub Repository: [OS_Project_Race_Condition](https://github.com/<your-org-or-user>/OS_Project_Race_Condition)
-Date: 2025-04-XX
+GitHub Repository: 
+Date: 2025-08-11
 
 1. Introduction
 
@@ -66,24 +66,6 @@ Operations:
 - STATS: Copy stats struct (reads, writes, length) to user buffer.
 
 5.2. User-space Library and Tester
-
-5.3. System Call Flow Diagram
-
-```mermaid
-graph TD
-  A["User app: rw_test"] --> B["User API: rw_* in reader_writer_api.h"]
-  B --> C["syscall(__NR_reader_writer, &args)"]
-  C --> D["Kernel: SYSCALL_DEFINE1(reader_writer)"]
-  D --> E{operation}
-  E -->|READ| F["down_read(); copy_to_user(); up_read(); return bytes"]
-  E -->|WRITE| G["down_write(); copy_from_user(); set length; up_write(); return bytes"]
-  E -->|RESET| H["down_write(); clear buffer & stats; up_write(); return 0"]
-  E -->|STATS| I["read stats; copy_to_user(stats); return 0"]
-  F --> J["User app continues"]
-  G --> J
-  H --> J
-  I --> J
-```
 
 - `reader_writer_api.h` provides thin wrappers over `syscall(__NR_reader_writer, ...)` with helper functions: `rw_read`, `rw_write`, `rw_reset`, `rw_get_stats`.
 - `rw_test.c` spawns configurable numbers of reader and writer threads. Writers write unique messages, readers read concurrently. The program prints basic throughput counts and verifies that readers never observe partial writes (demonstrating correct synchronization).
