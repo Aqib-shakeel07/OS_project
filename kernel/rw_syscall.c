@@ -17,7 +17,8 @@ enum rw_operation {
 
 struct rw_args {
     int operation;
-    void __user *buffer; 
+    void __user *buffer;
+    size_t length;
 };
 
 static DECLARE_RWSEM(rw_buffer_sem);
